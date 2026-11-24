@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit Agenzia Nautica · demo</title>
+<meta name="description" content="Kit Agenzia Nautica: Transiti, Scrivania di Comando, agente social e CRM dei posti barca. Guarda la demo con dati di prova e richiedi una demo guidata.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kit Agenzia Nautica · demo">
+<meta property="og:description" content="Posti barca, transiti, clienti, annunci e social: gli strumenti per un'agenzia nautica, in una demo con dati di prova.">
+<meta property="og:url" content="https://francescomarkio.github.io/kit-agenzia-nautica/">
+<meta property="og:image" content="https://francescomarkio.github.io/kit-agenzia-nautica/assets/kit-v3-poster.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23111F2A'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%23e4472f'/%3E%3C/svg%3E">
+<link rel="preload" href="fonts/hanken-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script src="modulo-config.js"></script>
+<style>
+@font-face{font-family:"Hanken Grotesk";src:url("fonts/hanken-grotesk-latin-wght-normal.woff2") format("woff2");font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Playfair Display";src:url("fonts/playfair-display-latin-wght-normal.woff2") format("woff2");font-weight:400 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Playfair Display";src:url("fonts/playfair-display-latin-wght-italic.woff2") format("woff2");font-weight:400 900;font-style:italic;font-display:swap}
+/* VOICE calmo e concreto, da banchina: chi gestisce un porto e non ha tempo da perdere.
+   IDEA il porto di notte visto dall'alto, con gli strumenti ormeggiati sopra come barche al pontile.
+   PICTURE le schermate vere dentro un portatile e un telefono fatti in CSS, sopra la texture marina; il video del Kit nel telefono.
+   COLOUR mare profondo #111F2A con texture, bianco pieno per le sezioni chiare, rosso boa #e4472f solo per le azioni.
+   TYPE Playfair Display per i titoli, Hanken Grotesk per il testo.
+   LAYOUT hero a tutto schermo (testo a sinistra, dispositivi sovrapposti a destra); su telefono: titolo, dispositivi, pulsanti. Poi vetrina a quattro schede e una fascia per ogni strumento. */
+:root{color-scheme:light dark;
+--bg:light-dark(#ffffff,#08121a);--panel:light-dark(#f3f7f8,#0f1f2a);--ink:light-dark(#0f1e28,#e9f1f4);--soft:light-dark(#4d6470,#a3b8c2);
+--deep:#111F2A;--foam:#eef6f8;--mist:#a8c3cf;--buoy:#e4472f;--buoy2:#c9361f;--line:light-dark(#dfe8ec,#1d3443);
+--serif:"Playfair Display",Georgia,serif;--sans:"Hanken Grotesk",system-ui,sans-serif;--ease:cubic-bezier(.2,.7,.2,1)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 var(--sans);overflow-x:clip}
+img,video{max-width:100%;height:auto;display:block}
+h1,h2{font-family:var(--serif);font-weight:500;line-height:1.05;letter-spacing:-.015em;text-wrap:balance;margin:0}
+h1{font-size:clamp(42px,5.6vw,78px)}
+h2{font-size:clamp(32px,3.8vw,50px)}
+h1 em,h2 em{font-style:italic;font-weight:400}
+h3{font:600 21px/1.25 var(--sans);margin:0 0 6px}
+p{margin:0 0 14px;max-width:60ch}
+a{color:inherit}
+.wrap{max-width:1240px;margin:0 auto}
+.band{padding-block:clamp(56px,7vw,112px);padding-left:max(5vw,16px);padding-right:max(5vw,16px)}
+.sea{color:var(--foam);background:linear-gradient(180deg,rgba(17,31,42,.45),rgba(17,31,42,.12) 45%,rgba(8,18,26,.6)),var(--deep) url("assets/texture-marina.webp") center/cover no-repeat}
+.sea .soft{color:var(--mist)}
+.soft{color:var(--soft)}
+.small{font-size:14px}
+.lead{font-size:clamp(18px,1.5vw,20px)}
+/* barra */
+.top{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px max(5vw,16px);background:rgba(13,25,34,.8);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--foam);border-bottom:1px solid rgba(255,255,255,.08)}
+.top b{font:500 19px var(--serif);white-space:nowrap}
+.top nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.top nav::-webkit-scrollbar{display:none}
+.top nav a{flex:none;text-decoration:none;font-size:15px;padding:10px 12px;border-radius:999px;color:var(--mist)}
+.top nav a:hover,.top nav a:focus-visible{color:#fff;background:rgba(255,255,255,.09);outline:none}
+/* pulsanti */
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:50px;padding:12px 20px;border-radius:999px;font:600 16px var(--sans);text-decoration:none;border:1.5px solid rgba(255,255,255,.5);background:transparent;color:inherit;cursor:pointer;transition:transform .25s var(--ease),background .25s,box-shadow .25s}
+.btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.08)}
+.btn.red{background:var(--buoy);border-color:var(--buoy);color:#fff;box-shadow:0 14px 30px -14px rgba(228,71,47,.9)}
+.btn.red:hover{background:var(--buoy2)}
+.btn.line{border-color:var(--line)}
+.btn.line:hover{background:var(--panel)}
+.btn:focus-visible,.card:focus-visible,.tabs button:focus-visible,.play:focus-visible{outline:3px solid #ffb59f;outline-offset:3px}
+.btn svg{width:18px;height:18px;flex:none}
+/* hero */
+.hero{min-height:calc(100svh - 64px);display:grid;align-content:center;padding-bottom:clamp(120px,12vw,170px)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);grid-template-areas:"text stage" "cta stage";column-gap:clamp(32px,5vw,80px);align-items:center}
+.hero-text{grid-area:text;align-self:end}
+.hero-cta{grid-area:cta;align-self:start}
+.stage{grid-area:stage}
+.hero h1{margin-bottom:22px}
+.hero .lead{color:#d6e5eb;margin-bottom:28px}
+.proof{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:26px;font-size:14px;color:var(--mist)}
+.proof span{display:inline-flex;align-items:center;gap:8px}
+.proof span::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--buoy)}
+/* dispositivi */
+.stage{position:relative;padding:0 9% 9% 0}
+.laptop .lid{position:relative;background:linear-gradient(160deg,#1b2a35,#070d12);border-radius:18px 18px 4px 4px;padding:2.3% 2.3% 2.8%;box-shadow:0 0 0 1px rgba(255,255,255,.14) inset,0 50px 90px -40px rgba(0,0,0,.85)}
+.laptop .lid::before{content:"";position:absolute;top:1%;left:50%;width:6px;height:6px;margin-left:-3px;border-radius:50%;background:#2c3c48}
+.screen{position:relative;aspect-ratio:16/10;overflow:hidden;border-radius:5px;background:#fbf9f6}
+.screen img{width:100%;height:100%;object-fit:cover;object-position:50% 0}
+.laptop{padding-inline:4%}
+.laptop .base{height:clamp(10px,1.3vw,16px);margin:0 -4%;border-radius:2px 2px 18px 18px;background:linear-gradient(180deg,#d9e1e5,#9aa7ae 60%,#6e7b83);position:relative}
+.laptop .base::before{content:"";position:absolute;left:50%;top:0;width:16%;height:40%;margin-left:-8%;border-radius:0 0 8px 8px;background:#8b989f}
+.phone{position:absolute;right:0;bottom:0;width:29%;aspect-ratio:9/16.9;padding:2.4%;border-radius:clamp(22px,3vw,40px);background:linear-gradient(150deg,#26343e,#05090c);box-shadow:0 0 0 1px rgba(255,255,255,.18) inset,0 40px 70px -24px rgba(0,0,0,.9)}
+.phone .scr{position:relative;height:100%;border-radius:clamp(16px,2.3vw,31px);overflow:hidden;background:#000;display:grid;place-items:center}
+.phone .scr::before{content:"";position:absolute;top:2.4%;left:50%;width:30%;height:3.2%;margin-left:-15%;border-radius:99px;background:#000;z-index:2}
+.phone video{width:100%;height:100%;object-fit:cover}
+.play{position:absolute;inset:0;z-index:3;display:grid;place-items:center;align-content:center;gap:10px;border:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.55));color:#fff;font:600 14px var(--sans);cursor:pointer;padding:0 8px 0}
+.play i{width:clamp(48px,5vw,64px);height:clamp(48px,5vw,64px);border-radius:50%;background:var(--buoy);display:grid;place-items:center;box-shadow:0 0 0 8px rgba(228,71,47,.25)}
+.play i::after{content:"";margin-left:4px;border-left:16px solid #fff;border-top:10px solid transparent;border-bottom:10px solid transparent}
+.play[hidden]{display:none}
+.chip{position:absolute;left:-4%;top:12%;z-index:4;display:flex;align-items:center;gap:10px;padding:10px 16px 10px 12px;border-radius:14px;background:rgba(255,255,255,.95);color:#0f1e28;font-size:14px;line-height:1.3;box-shadow:0 20px 40px -20px rgba(0,0,0,.7)}
+.chip b{display:block;font-size:15px}
+.chip::before{content:"";width:10px;height:10px;flex:none;border-radius:50%;background:#1fa66b;box-shadow:0 0 0 5px rgba(31,166,107,.2)}
+/* vetrina */
+.pier-band{position:relative;z-index:2;margin-top:clamp(-140px,-10vw,-96px);padding:0 max(5vw,16px)}
+.pier{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.card{display:flex;flex-direction:column;text-decoration:none;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 30px 60px -36px rgba(8,24,36,.55);transition:transform .35s var(--ease),box-shadow .35s}
+.card:hover{transform:translateY(-6px);box-shadow:0 40px 70px -34px rgba(8,24,36,.6)}
+.card .pic{aspect-ratio:16/10;overflow:hidden;background:var(--deep)}
+.card .pic img{width:100%;height:100%;object-fit:cover;object-position:50% 0;transition:transform .8s var(--ease)}
+.card:hover .pic img{transform:scale(1.05)}
+.card .pic.crm{display:grid;place-items:end start;padding:18px;color:var(--foam);background:linear-gradient(180deg,rgba(17,31,42,.2),rgba(8,18,26,.75)),var(--deep) url("assets/texture-marina.webp") center/cover}
+.card .pic.crm span{font:italic 400 clamp(24px,2.2vw,30px)/1.1 var(--serif)}
+.card .txt{padding:18px 20px 20px;display:flex;flex-direction:column;flex:1}
+.card p{font-size:15px;color:var(--soft);margin-bottom:12px}
+.card .go{margin-top:auto;font-weight:600;font-size:15px}
+.tag{display:inline-block;width:max-content;font-size:13px;font-weight:600;padding:4px 11px;border-radius:999px;margin-bottom:10px}
+.tag.live{background:rgba(228,71,47,.12);color:light-dark(#b8321c,#ff8e78)}
+.tag.new{background:light-dark(#efe7ff,#2a2244);color:light-dark(#5b3fc4,#c8b8ff)}
+.tag.call{background:light-dark(#e6eef1,#1a2e3a);color:var(--soft)}
+/* ritmo */
+.rhythm{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,3vw,40px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:28px 0;margin-top:clamp(48px,6vw,80px)}
+.rhythm div{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 16px;align-items:baseline}
+.rhythm strong{grid-row:span 2;font:500 clamp(44px,4.6vw,64px)/1 var(--serif);color:var(--buoy)}
+.rhythm span{font-weight:600}
+.rhythm small{font-size:15px;color:var(--soft)}
+/* sezioni */
+.split{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:clamp(32px,5vw,80px);align-items:center}
+.split.flip{grid-template-columns:minmax(0,1.18fr) minmax(0,.82fr)}
+.split.flip>.media{order:-1}
+.sec-head{margin-bottom:18px}
+ul.ticks{list-style:none;padding:0;margin:10px 0 24px}
+ul.ticks li{padding:11px 0 11px 30px;border-bottom:1px solid var(--line);position:relative}
+.sea ul.ticks li{border-color:rgba(255,255,255,.14)}
+ul.ticks li::before{content:"";position:absolute;left:3px;top:19px;width:11px;height:11px;border-radius:50%;border:2.5px solid var(--buoy)}
+.note{display:flex;gap:10px;font-size:15px;color:var(--soft);margin-top:18px;max-width:52ch}
+.note::before{content:"";flex:none;width:3px;border-radius:3px;background:var(--buoy)}
+.window{border-radius:16px;overflow:hidden;background:#fbf9f6;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 50px 90px -44px rgba(0,0,0,.85)}
+.window video{width:100%;aspect-ratio:16/9;background:#eef4f6}
+/* scrivania: schermate */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.tabs button{font:600 15px var(--sans);min-height:44px;padding:8px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:transparent;color:var(--foam);cursor:pointer;transition:background .25s,color .25s}
+.tabs button[aria-selected=true]{background:var(--foam);border-color:var(--foam);color:var(--deep)}
+.shots{position:relative;aspect-ratio:16/11;background:#fbf9f6}
+.shots figure{position:absolute;inset:0;margin:0;opacity:0;visibility:hidden;transition:opacity .6s var(--ease),visibility 0s .6s}
+.shots figure.on{opacity:1;visibility:visible;transition:opacity .6s var(--ease)}
+.shots img{width:100%;height:100%;object-fit:cover;object-position:50% 0;transition:object-position 9s ease-in-out}
+.shots:hover img,.shots:focus-within img{object-position:50% 100%}
+.cap{font-size:14px;color:var(--mist);margin-top:12px}
+/* agente social */
+.social-head{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(28px,5vw,72px);align-items:start;margin-bottom:clamp(32px,4vw,52px)}
+.flow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 28px;counter-reset:f}
+.flow div{position:relative;padding-left:44px}
+.flow div::before{counter-increment:f;content:counter(f);position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font:600 15px var(--sans);background:var(--panel);border:1px solid var(--line)}
+.flow div:nth-child(3)::before{background:var(--buoy);border-color:var(--buoy);color:#fff}
+.flow b{display:block}
+.flow span{color:var(--soft);font-size:16px}
+.stack{position:relative;padding-bottom:12%}
+.stack .window{background:#fbf9f6}
+.stack img{width:100%}
+.stack .back{width:94%}
+.stack .front{position:absolute;right:0;bottom:0;width:58%}
+.badge{position:absolute;left:3%;bottom:2%;z-index:2;max-width:32%;padding:14px 16px;border-radius:14px;background:var(--deep);color:var(--foam);font-size:15px;line-height:1.4;box-shadow:0 24px 40px -20px rgba(0,0,0,.7)}
+.badge b{display:block;font-size:16px;color:#fff}
+/* crm */
+.crm{border-radius:26px;overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.crm .l{padding:clamp(28px,4vw,56px)}
+.crm .r{padding:clamp(28px,4vw,56px);background:var(--panel);border:1px solid var(--line);border-left:0;border-radius:0 26px 26px 0}
+.crm .r p{color:var(--soft)}
+/* come si parte */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,3vw,36px);margin-top:36px}
+.steps div{border-top:2px solid var(--ink);padding-top:18px}
+.steps b{display:block;font:500 15px var(--sans);color:var(--buoy);margin-bottom:8px}
+footer .wrap{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:32px;align-items:end}
+footer h2{margin-bottom:14px}
+.mail{font:600 clamp(18px,2vw,22px) var(--sans);color:#fff;overflow-wrap:anywhere}
+footer .btns{justify-content:flex-end}
+.fine{margin-top:48px;padding-top:20px;border-top:1px solid rgba(255,255,255,.14);font-size:14px;color:var(--mist)}
+/* movimento */
+@keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes slidein{from{opacity:0;transform:translate(14%,10%) rotate(4deg)}to{opacity:1;transform:none}}
+@keyframes pan{0%,14%{object-position:50% 0}48%,62%{object-position:50% 100%}96%,100%{object-position:50% 0}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.hero-text{animation:rise .9s var(--ease) both}
+.hero-cta{animation:rise .9s .15s var(--ease) both}
+.laptop{animation:rise 1.1s .2s var(--ease) both}
+.laptop .screen img{animation:pan 26s 1.6s ease-in-out infinite}
+.phone{animation:slidein 1.1s .55s var(--ease) both}
+.chip{animation:rise .8s 1.1s var(--ease) both,bob 6s 2s ease-in-out infinite}
+@supports (animation-timeline:view()){
+  .reveal{animation:rise linear both;animation-timeline:view();animation-range:entry 5% entry 45%}
+}
+.kitv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:48px;align-items:center}
+@media(max-width:900px){.kitv{grid-template-columns:1fr;gap:24px}.kitv figure{max-width:420px;width:100%;margin:0 auto}}
+@media(max-width:1000px){.pier{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){
+  .hero{min-height:0}
+  .hero-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"text" "stage" "cta";row-gap:30px}
+  .stage{max-width:640px;width:100%}
+  .split,.split.flip,.crm,footer .wrap,.social-head{grid-template-columns:minmax(0,1fr)}
+  .split.flip>.media{order:0}
+  .crm .r{border-left:1px solid var(--line);border-top:0;border-radius:0 0 26px 26px}
+  footer .btns{justify-content:flex-start}
+}
+@media(max-width:700px){
+  .top b{display:none}
+  .rhythm,.steps{grid-template-columns:minmax(0,1fr)}
+  .rhythm{gap:20px}
+  .chip{left:0;top:auto;bottom:2%;font-size:13px}
+  .social-head,.flow{grid-template-columns:minmax(0,1fr)}
+  .badge{position:static;max-width:none;margin-top:14px}
+  .stack{padding-bottom:0}
+  .stack .back{width:100%}
+  .stack .back img{aspect-ratio:3/2;object-fit:cover;object-position:78% 0}
+  .stack .front{position:relative;right:auto;width:88%;margin:-14% 0 0 12%}
+  .stack .front img{aspect-ratio:1.82/1;object-fit:cover;object-position:100% 0}
+  .play{font-size:0;gap:0}
+}
+@media(max-width:560px){
+  .pier{grid-template-columns:minmax(0,1fr)}
+  .card .pic{aspect-ratio:16/8}
+  .btns .btn{flex:1 1 100%}
+  .phone{width:33%}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .shots:hover img,.shots:focus-within img{object-position:50% 0}
+}
+
+.gallery{position:relative}
+.gallery .shots.wide{aspect-ratio:16/10}
+.light .tabs button{border-color:var(--line);color:var(--ink)}
+.light .tabs button[aria-selected=true]{background:var(--deep);border-color:var(--deep);color:#fff}
+.light .cap{color:var(--soft)}
+.mini-phone{position:absolute;right:-14px;bottom:-34px;width:23%;min-width:110px;aspect-ratio:9/19;padding:1.6%;border-radius:26px;background:linear-gradient(150deg,#26343e,#05090c);box-shadow:0 0 0 1px rgba(255,255,255,.18) inset,0 40px 70px -30px rgba(0,0,0,.7);z-index:3}
+.mini-phone img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 0;border-radius:20px}
+.gallery .window{margin-right:8%}
+.mini-phone{max-width:200px}
+.gallery .cap,.gallery .cap+p{padding-right:min(26%,220px)}
+@media(max-width:700px){.mini-phone{width:30%;right:-6px;bottom:-24px}.gallery .window{margin-right:12%}}
+/* modulo richiesta demo */
+.req{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,5vw,80px);align-items:start}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 18px;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:clamp(20px,3vw,36px)}
+.form .full{grid-column:1/-1}
+.form label{display:block;font-weight:600;font-size:15px;margin-bottom:6px}
+.form label small{font-weight:400;color:var(--soft)}
+.form input,.form select,.form textarea{width:100%;font:16px/1.4 var(--sans);color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;min-height:48px}
+.form textarea{min-height:110px;resize:vertical}
+.form input:focus-visible,.form select:focus-visible,.form textarea:focus-visible{outline:3px solid #ffb59f;outline-offset:1px;border-color:var(--buoy)}
+.consent{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:start;font-size:15px}
+.consent input{width:22px;height:22px;min-height:0;margin:2px 0 0;accent-color:var(--buoy)}
+.consent label{font-weight:400;margin:0}
+.privacy{font-size:14px;color:var(--soft)}
+.privacy summary{cursor:pointer;font-weight:600;color:var(--ink)}
+.privacy p{font-size:14px;margin:8px 0 0;max-width:none}
+.form .btn.red{border:0}
+.esito{font-weight:600;margin:0}
+.esito.ok{color:light-dark(#137a4c,#5fd69d)}
+.esito.ko{color:light-dark(#b8321c,#ff8e78)}
+.hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;overflow:hidden}
+@media(max-width:900px){.req{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:560px){.form{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+
+<header class="top"><b>Kit Agenzia Nautica</b><nav aria-label="Sezioni"><a href="#kit-video">Il kit in un minuto</a><a href="#transiti">Transiti</a><a href="#scrivania">Scrivania di Comando</a><a href="#social">Agente social</a><a href="#crm">CRM</a><a href="#come">Come si parte</a><a href="#richiedi">Richiedi la demo</a></nav></header>
+
+<section class="band sea hero" aria-label="Presentazione">
+  <div class="wrap hero-grid">
+    <div class="hero-text">
+      <h1>Il tuo porto,<br><em>in ordine</em> ogni mattina</h1>
+      <p class="lead">Posti barca, transiti, clienti, annunci e social: gli strumenti che servono a un'agenzia nautica, nati lavorando ogni giorno accanto a un'agenzia vera. Qui li vedi in azione, con dati di prova.</p>
+    </div>
+    <div class="hero-cta">
+      <div class="btns">
+        <a class="btn red" href="#transiti">Prova Transiti dal vivo</a>
+        <button class="btn" type="button" id="kitPlay2"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4l10 6-10 6z" fill="currentColor"/></svg>Guarda il video, 30 secondi</button>
+      </div>
+      <p class="small" style="margin:16px 0 0"><a href="#richiedi" style="color:#fff">Vuoi vederlo sul tuo porto? Richiedi la demo guidata →</a></p>
+      <div class="proof"><span>Schermate vere delle app</span><span>Dati di prova</span><span>Per agenzie e porti turistici</span></div>
+    </div>
+    <div class="stage" aria-label="Le app sui dispositivi">
+      <div class="laptop">
+        <div class="lid"><div class="screen"><img src="assets/scrivania-oggi.jpg" alt="Scrivania di Comando, scheda Oggi: le tre priorità, le scadenze e i rischi aperti" width="1600" height="1698" fetchpriority="high"></div></div>
+        <div class="base"></div>
+      </div>
+      <div class="phone">
+        <div class="scr">
+          <video id="kitVideo" src="assets/crm-v1-9x16.mp4" poster="assets/crm-v1-9x16-poster.jpg" playsinline preload="none" aria-label="Video del Kit Agenzia Nautica, un minuto"></video>
+          <button class="play" type="button" id="kitPlay" aria-label="Guarda il video del CRM, 30 secondi"><i></i>30 secondi</button>
+        </div>
+      </div>
+      <div class="chip"><span><b>Scrivania di Comando</b>la prima schermata del mattino</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="pier-band" id="vetrina"><div class="wrap pier">
+  <a class="card" href="#transiti"><div class="pic"><img src="assets/transiti-01-oggi.jpg" alt="" loading="lazy"></div><div class="txt"><span class="tag live">Provala dal vivo</span><h3>Transiti</h3><p>Chi arriva, chi riparte, quale posto è libero. Dal telefono, in banchina.</p><span class="go">Vai alla demo →</span></div></a>
+  <a class="card" href="#scrivania"><div class="pic"><img src="assets/hero-oggi.jpg" alt="" loading="lazy"></div><div class="txt"><span class="tag live">Schermate vere</span><h3>Scrivania di Comando</h3><p>Ogni mattina, in una schermata: cosa fare oggi, scadenze, rischi, social e annunci.</p><span class="go">Guarda le schermate →</span></div></a>
+  <a class="card" href="#social"><div class="pic"><img src="assets/social-calendario.jpg" alt="" loading="lazy"></div><div class="txt"><span class="tag new">Nuovo</span><h3>Agente social</h3><p>Post, storie e reel di Instagram e Facebook, in calendario e approvati da te.</p><span class="go">Come funziona →</span></div></a>
+  <a class="card" href="#crm"><div class="pic"><img src="assets/crm-01-oggi.jpg" alt="" loading="lazy"></div><div class="txt"><span class="tag call">Demo guidata</span><h3>CRM dei posti barca</h3><p>Contratti, scadenze e clienti da richiamare, senza fogli sparsi.</p><span class="go">Come vederlo →</span></div></a>
+</div></div>
+
+<section class="band" id="kit-video">
+  <div class="wrap kitv">
+    <div class="reveal">
+      <h2 class="sec-head">Il kit in un minuto</h2>
+      <p class="lead">Un'agenzia nautica, quattro strumenti che lavorano insieme.</p>
+      <p>CRM per contratti e scadenze, Transiti per chi arriva e chi riparte, l'agente social che pubblica dopo la tua approvazione e la Scrivania di Comando che ogni mattina ti dice cosa conta oggi.</p>
+      <p class="soft small">Dati di prova. Gira ogni giorno in un porto vero.</p>
+    </div>
+    <figure class="reveal" style="margin:0;border-radius:18px;overflow:hidden;box-shadow:0 24px 60px rgba(15,31,42,.28);background:#0f1f2a;aspect-ratio:4/5">
+      <video src="assets/kit-v3.mp4" poster="assets/kit-v3-poster.jpg" controls playsinline preload="none" aria-label="Il Kit Agenzia Nautica in un minuto" style="width:100%;height:100%;object-fit:cover;display:block"></video>
+    </figure>
+  </div>
+</section>
+
+<section class="band" style="padding-top:0" aria-label="Il ritmo del lavoro">
+  <div class="wrap">
+    <div class="rhythm">
+      <div><strong>3</strong><span>priorità ogni mattina</span><small>In ordine, scelte per te nella Scrivania di Comando.</small></div>
+      <div><strong>1</strong><span>posto barca al giorno</span><small>Il posto del giorno, con i testi pronti per i gruppi.</small></div>
+      <div><strong>4</strong><span>strumenti che si parlano</span><small>Ognuno funziona da solo. Insieme il lavoro non si fa due volte.</small></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="transiti" style="padding-top:0">
+  <div class="wrap split">
+    <div class="reveal">
+      <h2 class="sec-head">Transiti</h2>
+      <p>D'estate le barche in transito arrivano e ripartono ogni giorno. Transiti tiene il programma della giornata, gli arrivi, le partenze e il calendario dei posti, così chi sta in banchina sa sempre dove mettere una barca.</p>
+      <ul class="ticks">
+        <li>Programma di oggi, domani e dopodomani</li>
+        <li>Posti occupati, da confermare e liberi a colpo d'occhio</li>
+        <li>Richieste dal sito che diventano prenotazioni in un tocco</li>
+        <li>Report del mese in PDF e CSV</li>
+      </ul>
+      <div class="btns"><a class="btn red" href="https://transiti-demo.onrender.com/">Apri la demo dal vivo</a></div>
+      <p class="note">Porto di prova "Punta Lumia", tutti i dati sono inventati. La prima apertura può richiedere fino a un minuto: il server si sveglia.</p>
+    </div>
+    <div class="media reveal gallery light" data-capt="Oggi: arrivi, partenze e chi deve ancora pagare.|Calendario: tutti i posti del mese, a colpo d'occhio.|Report del mese, da scaricare in PDF o CSV.|Richieste dal sito, da valutare e trasformare in prenotazioni.|Transiti in 30 secondi.">
+      <div class="tabs" role="tablist" aria-label="Schermate di Transiti">
+        <button type="button" role="tab" aria-selected="true">Oggi</button>
+        <button type="button" role="tab" aria-selected="false">Calendario</button>
+        <button type="button" role="tab" aria-selected="false">Report</button>
+        <button type="button" role="tab" aria-selected="false">Richieste</button>
+        <button type="button" role="tab" aria-selected="false">Video</button>
+      </div>
+      <div class="window"><div class="shots wide" tabindex="0" aria-live="polite">
+        <figure class="on"><img src="assets/transiti-01-oggi.jpg" alt="Transiti, pagina Oggi: arrivi e partenze del giorno" loading="lazy"></figure>
+        <figure><img src="assets/transiti-02-calendario.jpg" alt="Transiti, calendario dei posti del mese" loading="lazy"></figure>
+        <figure><img src="assets/transiti-03-report.jpg" alt="Transiti, report del mese" loading="lazy"></figure>
+        <figure><img src="assets/transiti-04-richieste.jpg" alt="Transiti, richieste arrivate dal sito" loading="lazy"></figure>
+        <figure><video src="assets/transiti-v3.mp4" poster="assets/transiti-v3-poster.jpg" controls playsinline preload="none" aria-label="Transiti in 30 secondi" style="width:100%;height:100%;object-fit:contain;background:#0f1f2a"></video></figure>
+      </div></div>
+      <div class="mini-phone"><img src="assets/transiti-05-telefono.jpg" alt="Transiti sul telefono, pagina Oggi" loading="lazy"></div>
+      <p class="cap">Oggi: arrivi, partenze e chi deve ancora pagare.</p>
+    </div>
+  </div>
+</section>
+
+<section class="band sea" id="scrivania">
+  <div class="wrap split flip">
+    <div class="media reveal gallery" data-capt="Oggi: priorità, scadenze e rischi.|Social: il calendario delle uscite.|Annunci: il posto del giorno e i gruppi.|La Scrivania di Comando in 30 secondi.">
+      <div class="tabs" role="tablist" aria-label="Schermate della Scrivania di Comando">
+        <button type="button" role="tab" aria-selected="true" aria-controls="shots">Oggi</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="shots">Social</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="shots">Annunci</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="shots">Video</button>
+      </div>
+      <div class="window"><div class="shots" id="shots" tabindex="0" aria-live="polite">
+        <figure class="on"><img src="assets/scrivania-oggi.jpg" alt="Scheda Oggi: priorità, scadenze, cose da fare e rischi aperti" loading="lazy"></figure>
+        <figure><img src="assets/scrivania-social.jpg" alt="Scheda Social: calendario delle uscite su Instagram e Facebook" loading="lazy"></figure>
+        <figure><img src="assets/scrivania-annunci.jpg" alt="Scheda Annunci: posto del giorno e annunci da rilanciare nei gruppi" loading="lazy"></figure>
+        <figure><video src="assets/scrivania-v1.mp4" poster="assets/scrivania-v1-poster.jpg" controls playsinline preload="none" aria-label="La Scrivania di Comando in 30 secondi" style="width:100%;height:100%;object-fit:contain;background:#0f1f2a"></video></figure>
+      </div></div>
+      <p class="cap">Oggi: priorità, scadenze e rischi. Passa sopra la schermata per scorrerla.</p>
+    </div>
+    <div class="reveal">
+      <h2 class="sec-head">Scrivania di Comando</h2>
+      <p class="lead">La prima cosa che il titolare apre la mattina.</p>
+      <p>Mette in ordine quello che conta oggi: le scadenze, i rischi, i post social in uscita e gli annunci dei posti barca da rilanciare.</p>
+      <ul class="ticks">
+        <li>Le tre priorità del giorno, in ordine</li>
+        <li>Scadenze con i giorni che mancano</li>
+        <li>Annunci pronti da copiare nei gruppi, uno al giorno</li>
+      </ul>
+      <p class="soft small">Schermate vere, con dati di prova.</p>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="social">
+  <div class="wrap">
+    <div class="social-head reveal">
+      <div>
+        <h2 class="sec-head">Agente social</h2>
+        <p class="lead">Instagram e Facebook dell'agenzia, senza pensarci ogni giorno. Post, storie e reel vengono preparati, messi in calendario e pubblicati da soli dopo la tua approvazione.</p>
+      </div>
+      <div class="flow">
+        <div><b>Prepara</b><span>Post, storie e reel, con testi e musica adatti all'agenzia.</span></div>
+        <div><b>Mette in calendario</b><span>Ogni uscita ha giorno, ora e canale.</span></div>
+        <div><b>Aspetta il tuo ok</b><span>Finché non approvi, niente parte.</span></div>
+        <div><b>Pubblica da solo</b><span>Dopo la tua approvazione, all'orario giusto, su Instagram e Facebook insieme.</span></div>
+      </div>
+    </div>
+    <div class="stack reveal">
+      <div class="window back"><img src="assets/social-calendario.jpg" alt="Calendario delle uscite: ogni giorno un post, una storia, un carosello o un reel, con il colore dello stato" loading="lazy" width="1513" height="500"></div>
+      <div class="window front"><img src="assets/social-coda.jpg" alt="Prossimi 7 giorni in coda e le uscite che aspettano l'approvazione" loading="lazy" width="1513" height="414"></div>
+      <div class="badge"><b>Da approvare</b>Le uscite del mese dopo aspettano il tuo ok prima di partire.</div>
+    </div>
+    <p class="soft small" style="margin-top:16px">Schermate vere della Scrivania di Comando, con dati di prova.</p>
+    <figure class="reveal" style="margin:34px auto 0;max-width:960px;border-radius:18px;overflow:hidden;box-shadow:0 24px 60px rgba(15,31,42,.28);background:#0f1f2a;aspect-ratio:16/9">
+      <video src="assets/agente-social-v1.mp4" poster="assets/agente-social-v1-poster.jpg" controls playsinline preload="none" aria-label="L'agente social in 30 secondi" style="width:100%;height:100%;object-fit:contain;display:block"></video>
+    </figure>
+    <p class="soft small" style="text-align:center;margin-top:10px">L'agente social in 30 secondi.</p>
+  </div>
+</section>
+
+<section class="band" id="crm" style="padding-top:0">
+  <div class="wrap crm reveal">
+    <div class="l sea">
+      <h2 class="sec-head">CRM dei posti barca</h2>
+      <p>Contratti di ormeggio, scadenze, rinnovi e clienti da richiamare, in un posto solo. Ogni mattina la pagina Oggi dice chi chiamare e cosa sta per scadere.</p>
+      <ul class="ticks">
+        <li>Scadenze divise per fasce: oltre 90, 60, 30 giorni, scaduti</li>
+        <li>Firme, documenti e badge che mancano, pratica per pratica</li>
+        <li>Decisione sul rinnovo di ogni cliente, senza perdere lo storico</li>
+      </ul>
+    </div>
+    <div class="r">
+      <span class="tag call">Demo guidata</span>
+      <h3>Lo vedi con me, su un archivio di prova</h3>
+      <p>Il CRM contiene i dati di chi lo usa, per questo non c'è un link pubblico: le schermate qui sotto sono vere, e dal vivo te lo mostro in una demo guidata, con contratti inventati.</p>
+      <p>Ti mostro anche come si collega a Transiti e alla Scrivania di Comando.</p>
+      <div class="btns" style="margin-top:22px"><a class="btn red" href="#richiedi">Chiedi la demo guidata</a></div>
+      <p class="small" style="margin-top:12px">francescoromano.0793@gmail.com</p>
+    </div>
+  </div>
+
+  <div class="wrap reveal" style="margin-top:clamp(28px,4vw,48px)">
+    <div class="gallery light" data-capt="Oggi: le scadenze divise per fasce e cosa fare per ogni contratto.|Contratti: tutto il registro, con filtri per scadenza e banchina.|Fascicolo: firme, documenti e decisione sul rinnovo.|Scadenziario: dai contratti scaduti a quelli dei prossimi 90 giorni.|Il CRM in 30 secondi.">
+      <div class="tabs" role="tablist" aria-label="Schermate del CRM">
+        <button type="button" role="tab" aria-selected="true">Oggi</button>
+        <button type="button" role="tab" aria-selected="false">Contratti</button>
+        <button type="button" role="tab" aria-selected="false">Fascicolo</button>
+        <button type="button" role="tab" aria-selected="false">Scadenziario</button>
+        <button type="button" role="tab" aria-selected="false">Video</button>
+      </div>
+      <div class="window"><div class="shots wide" tabindex="0" aria-live="polite">
+        <figure class="on"><img src="assets/crm-01-oggi.jpg" alt="CRM, pagina Oggi con le scadenze per fasce" loading="lazy"></figure>
+        <figure><img src="assets/crm-02-contratti.jpg" alt="CRM, elenco dei contratti" loading="lazy"></figure>
+        <figure><img src="assets/crm-03-scheda-cliente.jpg" alt="CRM, fascicolo di un contratto con firme e documenti" loading="lazy"></figure>
+        <figure><img src="assets/crm-04-scadenze.jpg" alt="CRM, scadenziario dei rinnovi" loading="lazy"></figure>
+        <figure><video src="assets/crm-v1.mp4" poster="assets/crm-v1-poster.jpg" controls playsinline preload="none" aria-label="CRM in 30 secondi" style="width:100%;height:100%;object-fit:contain;background:#eef2f8"></video></figure>
+      </div></div>
+      <div class="mini-phone"><img src="assets/crm-05-telefono.jpg" alt="CRM sul telefono, pagina Oggi" loading="lazy"></div>
+      <p class="cap">Oggi: le scadenze divise per fasce e cosa fare per ogni contratto.</p>
+      <p class="small soft" style="margin-top:4px">Schermate vere del CRM, con un archivio di prova: contratti, nomi e importi sono inventati.</p>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="come" style="padding-top:0">
+  <div class="wrap reveal">
+    <h2>Come si parte</h2>
+    <div class="steps">
+      <div><b>Prima</b><h3>Guardi e provi</h3><p class="soft">Transiti dal vivo, la Scrivania di Comando e il CRM in una demo guidata.</p></div>
+      <div><b>Poi</b><h3>Lo adattiamo al tuo porto</h3><p class="soft">Pontili, posti, regole e modo di lavorare: lo strumento si piega a te, non il contrario.</p></div>
+      <div><b>Ogni giorno</b><h3>Lo usi e lo rifiniamo</h3><p class="soft">Nelle prime settimane lo sistemiamo insieme, con quello che serve davvero.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="richiedi" style="padding-top:0">
+  <div class="wrap req">
+    <div class="reveal">
+      <h2 class="sec-head">Richiedi la demo</h2>
+      <p class="lead">Ti scrivo io, dalla mia email, con il link alla demo e al video.</p>
+      <p>Se ti va, poi lo guardiamo insieme in 20 minuti: Transiti dal vivo, la Scrivania di Comando e il CRM su un archivio di prova, pensando al tuo porto.</p>
+      <p class="soft small">Niente newsletter e niente liste: una risposta e al massimo due promemoria. Basta rispondere "no" per non ricevere altro.</p>
+    </div>
+    <form class="form reveal" id="modulo" novalidate>
+      <div><label for="f-nome">Nome e cognome</label><input id="f-nome" name="nome" autocomplete="name" required maxlength="120"></div>
+      <div><label for="f-azienda">Azienda</label><input id="f-azienda" name="azienda" autocomplete="organization" required maxlength="160"></div>
+      <div><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required maxlength="160"></div>
+      <div><label for="f-tel">Telefono <small>(facoltativo)</small></label><input id="f-tel" name="telefono" type="tel" autocomplete="tel" maxlength="40"></div>
+      <div class="full"><label for="f-tipo">Tipo di attività</label>
+        <select id="f-tipo" name="tipo" required>
+          <option value="">Scegli…</option>
+          <option>Agenzia nautica</option>
+          <option>Porto turistico o marina</option>
+          <option>Cantiere o rimessaggio</option>
+          <option>Noleggio barche</option>
+          <option>Altro</option>
+        </select></div>
+      <div class="full"><label for="f-msg">Messaggio <small>(facoltativo)</small></label><textarea id="f-msg" name="messaggio" maxlength="2000" placeholder="Per esempio: quanti posti gestite, cosa vi fa perdere più tempo oggi."></textarea></div>
+      <div class="hp" aria-hidden="true"><label for="f-sito">Non compilare</label><input id="f-sito" name="sito_web" tabindex="-1" autocomplete="off"></div>
+      <div class="full consent"><input type="checkbox" id="f-ok" name="consenso" value="si" required><label for="f-ok">Acconsento a essere ricontattato via email per questa richiesta (una risposta e al massimo 2 promemoria), come spiegato nell'informativa qui sotto.</label></div>
+      <details class="full privacy"><summary>Informativa breve sulla privacy</summary>
+        <p><b>Titolare:</b> Francesco Romano, <a href="mailto:francescoromano.0793@gmail.com">francescoromano.0793@gmail.com</a>.</p>
+        <p><b>Cosa faccio con i tuoi dati:</b> li uso solo per rispondere alla tua richiesta di demo e per mandarti al massimo 2 promemoria via email (dopo 3 e dopo 7 giorni) se non rispondi. Niente newsletter, niente cessione a terzi.</p>
+        <p><b>Base:</b> il tuo consenso, che puoi ritirare quando vuoi rispondendo "no" o "non contattarmi": i promemoria si fermano subito.</p>
+        <p><b>Dove e per quanto:</b> nel mio account Google (Gmail e Fogli Google), per non più di 12 mesi.</p>
+        <p><b>I tuoi diritti:</b> puoi chiedere di vedere, correggere o cancellare i tuoi dati scrivendo all'email qui sopra; li cancello su richiesta. Puoi anche rivolgerti al Garante per la protezione dei dati personali.</p>
+      </details>
+      <div class="full"><button class="btn red" type="submit" id="f-invia">Richiedi la demo</button></div>
+      <p class="full esito" id="f-esito" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<footer class="band sea" id="contatto">
+  <div class="wrap">
+    <div>
+      <h2>Parliamo del tuo porto</h2>
+      <p class="soft">Francesco, Digital Operations &amp; Product Specialist. Costruisco strumenti su misura per piccole imprese, a partire da come lavorano davvero.</p>
+      <a class="mail" href="mailto:francescoromano.0793@gmail.com">francescoromano.0793@gmail.com</a>
+    </div>
+    <div class="btns"><a class="btn red" href="https://transiti-demo.onrender.com/">Prova Transiti dal vivo</a><a class="btn" href="#richiedi">Richiedi la demo</a></div>
+  </div>
+  <div class="wrap fine">Kit Agenzia Nautica · demo con dati di prova. Nessun dato reale di clienti in questa pagina.</div>
+</footer>
+
+<script>
+{
+  const video = document.getElementById('kitVideo');
+  const cover = document.getElementById('kitPlay');
+  const avvia = () => {
+    cover.hidden = true;
+    video.controls = true;
+    const p = video.play();
+    if (p && p.catch) p.catch(() => {});
+  };
+  cover.addEventListener('click', avvia);
+  document.getElementById('kitPlay2').addEventListener('click', () => {
+    video.closest('.stage').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    avvia();
+  });
+  video.addEventListener('ended', () => { video.controls = false; cover.hidden = false; });
+
+  document.querySelectorAll('.gallery').forEach((g) => {
+    const tabs = [...g.querySelectorAll('[role=tab]')];
+    const figs = [...g.querySelectorAll('.shots figure')];
+    const cap = g.querySelector('.cap');
+    const testi = (g.dataset.capt || '').split('|');
+    let ora = 0;
+    const vai = (i) => {
+      ora = (i + figs.length) % figs.length;
+      figs.forEach((f, k) => { f.classList.toggle('on', k === ora); const v = f.querySelector('video'); if (v && k !== ora) v.pause(); });
+      tabs.forEach((b, k) => b.setAttribute('aria-selected', String(k === ora)));
+      if (cap && testi[ora]) cap.textContent = testi[ora];
+    };
+    tabs.forEach((b, k) => b.addEventListener('click', () => vai(k)));
+    const tasti = (e) => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); vai(ora + 1); tabs[ora].focus(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); vai(ora - 1); tabs[ora].focus(); }
+    };
+    tabs.forEach((b) => b.addEventListener('keydown', tasti));
+    const sh = g.querySelector('.shots'); if (sh) sh.addEventListener('keydown', tasti);
+  });
+}
+
+{
+  const f = document.getElementById('modulo');
+  const esito = document.getElementById('f-esito');
+  const bott = document.getElementById('f-invia');
+  const aperto = Date.now();
+  const scrivi = (t, cls) => { esito.textContent = t; esito.className = 'full esito ' + (cls || ''); };
+  f.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const d = Object.fromEntries(new FormData(f).entries());
+    if (!f.checkValidity()) {
+      const primo = f.querySelector(':invalid');
+      scrivi(primo && primo.type === 'checkbox' ? 'Per inviare serve il consenso.' : 'Controlla i campi obbligatori: nome, azienda, email valida e tipo di attività.', 'ko');
+      if (primo) primo.focus();
+      return;
+    }
+    if (d.sito_web) { scrivi('Grazie, richiesta ricevuta.', 'ok'); f.reset(); return; }
+    const q = new URLSearchParams(location.search);
+    d.fonte = q.get('utm_source') || q.get('fonte') || (document.referrer ? new URL(document.referrer).hostname : 'diretto');
+    d.tempo = String(Math.round((Date.now() - aperto) / 1000));
+    d.versione_consenso = 'informativa-2026-11-24';
+    const url = window.MODULO_ENDPOINT || '';
+    if (!url) {
+      const corpo = 'Nome: ' + d.nome + '\nAzienda: ' + d.azienda + '\nEmail: ' + d.email + '\nTelefono: ' + (d.telefono || '-') + '\nAttività: ' + d.tipo + '\n\n' + (d.messaggio || '');
+      location.href = 'mailto:francescoromano.0793@gmail.com?subject=' + encodeURIComponent('Richiesta demo Kit Agenzia Nautica') + '&body=' + encodeURIComponent(corpo);
+      scrivi('Si è aperta la tua email con la richiesta già scritta: premi Invia e ti rispondo io.', 'ok');
+      return;
+    }
+    bott.disabled = true; scrivi('Invio in corso…');
+    try {
+      const r = await fetch(url, { method: 'POST', body: new URLSearchParams(d) });
+      const j = await r.json();
+      if (!j.ok) throw new Error(j.errore || 'errore');
+      f.reset();
+      scrivi('Fatto. Ti ho appena scritto a ' + d.email + ': se non vedi la mail, guarda anche in Spam o Promozioni.', 'ok');
+    } catch (e) {
+      scrivi('Non sono riuscito a inviare. Scrivimi direttamente a francescoromano.0793@gmail.com e ti rispondo io.', 'ko');
+    } finally { bott.disabled = false; }
+  });
+}
+</script>
+</body>
+</html>
